@@ -6,12 +6,33 @@ class FToast {
   OverlayEntry _overlayEntry;
   Timer _timer;
 
+  /// 显示文字
+  void showText(
+    BuildContext context,
+    String text, {
+    Duration duration,
+    AlignmentGeometry alignment,
+    EdgeInsetsGeometry margin,
+    Color backgroundColor,
+  }) {
+    show(
+      context,
+      Text(text),
+      duration: duration,
+      alignment: alignment,
+      margin: margin,
+      backgroundColor: backgroundColor,
+    );
+  }
+
+  /// 显示Widget
   void show(
     BuildContext context,
     Widget child, {
     Duration duration,
     AlignmentGeometry alignment,
     EdgeInsetsGeometry margin,
+    Color backgroundColor,
   }) {
     showCustom(
       context,
@@ -19,11 +40,13 @@ class FToast {
         child: child,
         alignment: alignment,
         margin: margin,
+        backgroundColor: backgroundColor,
       ),
       duration: duration,
     );
   }
 
+  /// 完全自定义显示Widget，即传入的Widget直接显示出来
   void showCustom(
     BuildContext context,
     Widget child, {
@@ -47,6 +70,7 @@ class FToast {
     });
   }
 
+  /// 关闭当前Toast
   void dismiss() {
     if (_timer != null) {
       _timer.cancel();
@@ -63,13 +87,16 @@ class _ToastWidget extends StatelessWidget {
   final Widget child;
   final AlignmentGeometry alignment;
   final EdgeInsetsGeometry margin;
+  final Color backgroundColor;
 
   _ToastWidget({
     this.child,
     Alignment alignment,
     this.margin,
+    Color backgroundColor,
   })  : assert(child != null),
-        this.alignment = alignment ?? Alignment.bottomCenter;
+        this.alignment = alignment ?? Alignment.bottomCenter,
+        this.backgroundColor = backgroundColor ?? Colors.black;
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +110,7 @@ class _ToastWidget extends StatelessWidget {
       padding: padding,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(5),
         ),
         constraints: BoxConstraints(
