@@ -61,8 +61,7 @@ class FToast {
     overlayState.insert(_overlayEntry);
 
     duration ??= const Duration(
-      seconds: 1,
-      milliseconds: 500,
+      seconds: 2,
     );
 
     _timer = Timer(duration, () {
