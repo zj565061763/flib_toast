@@ -1,15 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class FToast {
   OverlayEntry _overlayEntry;
+  Timer _timer;
 
   void show(
-      BuildContext context,
-      Widget child, {
-        Duration duration,
-        AlignmentGeometry alignment,
-        EdgeInsetsGeometry margin,
-      }) async {
+    BuildContext context,
+    Widget child, {
+    Duration duration,
+    AlignmentGeometry alignment,
+    EdgeInsetsGeometry margin,
+  }) {
     showCustom(
       context,
       _ToastWidget(
@@ -22,10 +25,10 @@ class FToast {
   }
 
   void showCustom(
-      BuildContext context,
-      Widget child, {
-        Duration duration,
-      }) async {
+    BuildContext context,
+    Widget child, {
+    Duration duration,
+  }) {
     final OverlayState overlayState = Overlay.of(context);
 
     dismiss();
@@ -38,11 +41,17 @@ class FToast {
       seconds: 1,
       milliseconds: 500,
     );
-    await Future.delayed(duration);
-    dismiss();
+
+    _timer = Timer(duration, () {
+      dismiss();
+    });
   }
 
   void dismiss() {
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+    }
     if (_overlayEntry != null) {
       _overlayEntry.remove();
       _overlayEntry = null;
