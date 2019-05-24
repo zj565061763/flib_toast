@@ -7,7 +7,7 @@ class FToast {
   Timer _timer;
 
   /// 显示文字
-  void showText(
+  void show(
     BuildContext context,
     String text, {
     Duration duration,
@@ -15,7 +15,7 @@ class FToast {
     EdgeInsetsGeometry margin,
     Color backgroundColor,
   }) {
-    show(
+    showWidget(
       context,
       Text(text),
       duration: duration,
@@ -26,7 +26,7 @@ class FToast {
   }
 
   /// 显示Widget
-  void show(
+  void showWidget(
     BuildContext context,
     Widget child, {
     Duration duration,
