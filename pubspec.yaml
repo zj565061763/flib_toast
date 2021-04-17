@@ -5,7 +5,7 @@ author: Sunday<565061763@qq.com>
 homepage: https://github.com/zj565061763/flib_toast
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.12.0"
 
 dependencies:
   flutter:

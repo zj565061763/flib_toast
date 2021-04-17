@@ -3,19 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class FToast {
-  OverlayEntry _overlayEntry;
-  Timer _timer;
+  OverlayEntry? _overlayEntry;
+  Timer? _timer;
 
   /// 显示文字
   void show(
     BuildContext context,
     String text, {
-    Duration duration,
-    AlignmentGeometry alignment,
-    EdgeInsetsGeometry margin,
-    Color backgroundColor,
+    Duration? duration,
+    AlignmentGeometry? alignment,
+    EdgeInsetsGeometry? margin,
+    Color? backgroundColor,
   }) {
-    showWidget(
+    showContent(
       context,
       Text(text),
       duration: duration,
@@ -25,14 +25,14 @@ class FToast {
     );
   }
 
-  /// 显示Widget
-  void showWidget(
+  /// 显示内容Widget
+  void showContent(
     BuildContext context,
     Widget child, {
-    Duration duration,
-    AlignmentGeometry alignment,
-    EdgeInsetsGeometry margin,
-    Color backgroundColor,
+    Duration? duration,
+    AlignmentGeometry? alignment,
+    EdgeInsetsGeometry? margin,
+    Color? backgroundColor,
   }) {
     showCustom(
       context,
@@ -46,70 +46,65 @@ class FToast {
     );
   }
 
-  /// 完全自定义显示Widget，即传入的Widget直接显示出来
-  void showCustom(
+  /// 显示传入的Widget
+  bool showCustom(
     BuildContext context,
     Widget child, {
-    Duration duration,
+    Duration? duration,
   }) {
-    final OverlayState overlayState = Overlay.of(context);
-
     dismiss();
+
+    final OverlayState? overlayState = Overlay.of(context);
+    if (overlayState == null) return false;
+
     _overlayEntry = OverlayEntry(builder: (context) {
       return child;
     });
-    overlayState.insert(_overlayEntry);
+    overlayState.insert(_overlayEntry!);
 
-    duration ??= const Duration(
-      seconds: 2,
-    );
-
+    duration ??= const Duration(seconds: 2);
     _timer = Timer(duration, () {
       dismiss();
     });
+
+    return true;
   }
 
-  /// 关闭当前Toast
+  /// 关闭Toast
   void dismiss() {
-    if (_timer != null) {
-      _timer.cancel();
-      _timer = null;
-    }
-    if (_overlayEntry != null) {
-      _overlayEntry.remove();
-      _overlayEntry = null;
-    }
+    _timer?.cancel();
+    _timer = null;
+
+    _overlayEntry?.remove();
+    _overlayEntry = null;
   }
 }
 
 class _ToastWidget extends StatelessWidget {
   final Widget child;
-  final AlignmentGeometry alignment;
-  final EdgeInsetsGeometry margin;
-  final Color backgroundColor;
+  final AlignmentGeometry? alignment;
+  final EdgeInsetsGeometry? margin;
+  final Color? backgroundColor;
 
   _ToastWidget({
-    this.child,
-    Alignment alignment,
+    required this.child,
+    this.alignment,
     this.margin,
-    Color backgroundColor,
-  })  : assert(child != null),
-        this.alignment = alignment ?? Alignment.bottomCenter,
-        this.backgroundColor = backgroundColor ?? Colors.black;
+    this.backgroundColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
-
     final EdgeInsetsGeometry padding =
         margin ?? EdgeInsets.all(mediaQueryData.size.width / 10);
 
     return Container(
-      alignment: alignment,
+      alignment: this.alignment ?? Alignment.bottomCenter,
       padding: padding,
       child: Container(
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: this.backgroundColor ?? Colors.black,
           borderRadius: BorderRadius.circular(5),
         ),
         constraints: BoxConstraints(
